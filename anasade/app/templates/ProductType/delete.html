@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer un ProductType</title>
+</head>
+<body>
+    <h1>Êtes-vous sûr de vouloir supprimer ce ProductType ?</h1>
+    <p>Code : {{ object.code }}</p>
+    <p>Label : {{ object.label }}</p>
+    <p>Description : {{ object.description }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'producttype-list' %}">Annuler</a>
+</body>
+</html>

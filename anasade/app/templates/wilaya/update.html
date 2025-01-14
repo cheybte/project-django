@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modifier une Wilaya</title>
+</head>
+<body>
+    <h1>Modifier une Wilaya</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Mettre à jour</button>
+    </form>
+    <a href="{% url 'wilaya-list' %}">Retour à la liste</a>
+</body>
+</html>

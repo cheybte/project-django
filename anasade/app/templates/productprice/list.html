@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des prix des produits</title>
+</head>
+<body>
+    <h1>Liste des prix des produits</h1>
+    <a href="{% url 'productprice-create' %}">Ajouter un prix</a>
+    <ul>
+        {% for price in product_prices %}
+            <li>
+                Produit : {{ price.product.name }} - Prix : {{ price.value }}
+                <a href="{% url 'productprice-update' price.id %}">Modifier</a> |
+                <a href="{% url 'productprice-delete' price.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Wilayas</title>
+</head>
+<body>
+    <h1>Liste des Wilayas</h1>
+    <a href="{% url 'wilaya-create' %}">Créer une nouvelle Wilaya</a>
+    <ul>
+        {% for wilaya in wilayas %}
+            <li>
+                {{ wilaya.name }} ({{ wilaya.code }})
+                <a href="{% url 'wilaya-update' wilaya.id %}">Modifier</a> |
+                <a href="{% url 'wilaya-delete' wilaya.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

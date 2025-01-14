@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer une Commune</title>
+</head>
+<body>
+    <h1>Êtes-vous sûr de vouloir supprimer cette Commune ?</h1>
+    <p>Code : {{ object.code }}</p>
+    <p>Nom : {{ object.name }}</p>
+    <p>Moughataa : {{ object.moughataa.label }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'commune-list' %}">Annuler</a>
+</body>
+</html>

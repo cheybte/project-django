@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer un Point de Vente</title>
+</head>
+<body>
+    <h1>Créer un nouveau Point de Vente</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer</button>
+    </form>
+    <a href="{% url 'pointofsale-list' %}">Retour à la liste</a>
+</body>
+</html>

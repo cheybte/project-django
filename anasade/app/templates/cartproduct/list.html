@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des CartProducts</title>
+</head>
+<body>
+    <h1>Liste des CartProducts</h1>
+    <a href="{% url 'cartproduct-create' %}">Ajouter un CartProduct</a>
+    <ul>
+        {% for cartproduct in cartproducts %}
+            <li>
+                {{ cartproduct.cart.name }} - {{ cartproduct.product.name }} 
+                ({{ cartproduct.weight }} kg)
+                <a href="{% url 'cartproduct-update' cartproduct.id %}">Modifier</a> |
+                <a href="{% url 'cartproduct-delete' cartproduct.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

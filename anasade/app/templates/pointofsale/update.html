@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modifier un Point de Vente</title>
+</head>
+<body>
+    <h1>Modifier un Point de Vente</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Mettre à jour</button>
+    </form>
+    <a href="{% url 'pointofsale-list' %}">Retour à la liste</a>
+</body>
+</html>

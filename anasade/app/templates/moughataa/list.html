@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Moughataas</title>
+</head>
+<body>
+    <h1>Liste des Moughataas</h1>
+    <a href="{% url 'moughataa-create' %}">Créer une nouvelle Moughataa</a>
+    <ul>
+        {% for moughataa in moughataas %}
+            <li>
+                {{ moughataa.label }} ({{ moughataa.code }}) - Wilaya : {{ moughataa.wilaya.name }}
+                <a href="{% url 'moughataa-update' moughataa.id %}">Modifier</a> |
+                <a href="{% url 'moughataa-delete' moughataa.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Produits</title>
+</head>
+<body>
+    <h1>Liste des Produits</h1>
+    <a href="{% url 'product-create' %}">Créer un nouveau Produit</a>
+    <ul>
+        {% for product in products %}
+            <li>
+                {{ product.name }} ({{ product.code }}) - {{ product.unit_measure }}
+                <a href="{% url 'product-update' product.id %}">Modifier</a> |
+                <a href="{% url 'product-delete' product.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

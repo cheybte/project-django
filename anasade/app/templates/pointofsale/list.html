@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Points de Vente</title>
+</head>
+<body>
+    <h1>Liste des Points de Vente</h1>
+    <a href="{% url 'pointofsale-create' %}">Créer un nouveau Point de Vente</a>
+    <ul>
+        {% for point in points_of_sale %}
+            <li>
+                {{ point.code }} - {{ point.type }}
+                <a href="{% url 'pointofsale-update' point.id %}">Modifier</a> |
+                <a href="{% url 'pointofsale-delete' point.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer un Point de Vente</title>
+</head>
+<body>
+    <h1>Êtes-vous sûr de vouloir supprimer ce Point de Vente ?</h1>
+    <p>Code : {{ object.code }}</p>
+    <p>Type : {{ object.type }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'pointofsale-list' %}">Annuler</a>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer une Moughataa</title>
+</head>
+<body>
+    <h1>Êtes-vous sûr de vouloir supprimer cette Moughataa ?</h1>
+    <p>Code : {{ object.code }}</p>
+    <p>Nom : {{ object.label }}</p>
+    <p>Wilaya : {{ object.wilaya.name }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'moughataa-list' %}">Annuler</a>
+</body>
+</html>

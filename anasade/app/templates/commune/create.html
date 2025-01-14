@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer une nouvelle Commune</title>
+</head>
+<body>
+    <h1>Créer une nouvelle Commune</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer</button>
+    </form>
+    <a href="{% url 'commune-list' %}">Retour à la liste</a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer un prix</title>
+</head>
+<body>
+    <h1>Êtes-vous sûr de vouloir supprimer ce prix ?</h1>
+    <p>Produit : {{ object.product.name }}</p>
+    <p>Prix : {{ object.value }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'productprice-list' %}">Annuler</a>
+</body>
+</html>

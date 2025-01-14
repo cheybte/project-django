@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Carts</title>
+</head>
+<body>
+    <h1>Liste des Carts</h1>
+    <a href="{% url 'cart-create' %}">Créer un nouveau Cart</a>
+    <ul>
+        {% for cart in carts %}
+            <li>
+                {{ cart.name }} ({{ cart.code }})
+                <a href="{% url 'cart-update' cart.id %}">Modifier</a> |
+                <a href="{% url 'cart-delete' cart.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

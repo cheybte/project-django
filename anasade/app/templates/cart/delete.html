@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer un Cart</title>
+</head>
+<body>
+    <h1>Êtes-vous sûr de vouloir supprimer ce Cart ?</h1>
+    <p>Code : {{ object.code }}</p>
+    <p>Nom : {{ object.name }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'cart-list' %}">Annuler</a>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter un prix</title>
+</head>
+<body>
+    <h1>Ajouter un prix pour un produit</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer</button>
+    </form>
+    <a href="{% url 'productprice-list' %}">Retour à la liste</a>
+</body>
+</html>

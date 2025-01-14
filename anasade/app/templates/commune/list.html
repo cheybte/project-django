@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Communes</title>
+</head>
+<body>
+    <h1>Liste des Communes</h1>
+    <a href="{% url 'commune-create' %}">Créer une nouvelle Commune</a>
+    <ul>
+        {% for commune in communes %}
+            <li>
+                {{ commune.name }} ({{ commune.code }}) - Moughataa : {{ commune.moughataa.label }}
+                <a href="{% url 'commune-update' commune.id %}">Modifier</a> |
+                <a href="{% url 'commune-delete' commune.id %}">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
