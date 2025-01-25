@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a+ikj%pm1si@p=vx#!dfl%&nk*djdb_yl8k374-wwx%9jh%u*4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': os.getenv('DATABASE_NAME', 'inpc_db'),
         'USER': os.getenv('DATABASE_USER', 'root'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', '00000000'),
-        'HOST': os.getenv('DATABASE_HOST', 'db'),
+        'HOST': os.getenv('DATABASE_HOST', 'mysql_db_23086'),
         'PORT': os.getenv('DATABASE_PORT', '3306'),
     }
 }
@@ -131,3 +131,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORRIGINS = ['http://138.201.52.29:25086']

@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  db:
+  mysql_db_23086:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: mysql_db_23086
     restart: always
     environment:
         MYSQL_DATABASE: inpc_db
@@ -15,18 +15,18 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  web:
+  django_app:
     build:
       context: .
     container_name: django_app
     restart: always
     depends_on:
-      - db
+      - mysql_db_23086
     environment:
       DATABASE_NAME: inpc_db
       DATABASE_USER: root
       DATABASE_PASSWORD: 00000000
-      DATABASE_HOST: db
+      DATABASE_HOST: mysql_db_23086
       DATABASE_PORT: 3306
     ports:
       - "23086:23086"
