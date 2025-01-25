@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Supprimer un CartProduct</title>
-</head>
-<body>
-    <h1>Êtes-vous sûr de vouloir supprimer ce CartProduct ?</h1>
-    <p>{{ object.cart.name }} - {{ object.product.name }}</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Supprimer</button>
-    </form>
-    <a href="{% url 'cartproduct-list' %}">Annuler</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Supprimer un CartProduct{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h1 class="text-center text-danger mb-4">Supprimer un CartProduct</h1>
+        <p class="text-center">Êtes-vous sûr de vouloir supprimer ce CartProduct ?</p>
+        <div class="text-center mb-4">
+            <strong>{{ object.cart.name }} - {{ object.product.name }}</strong>
+        </div>
+        <form method="post" class="text-center">
+            {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+            <a href="{% url 'cartproduct-list' %}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

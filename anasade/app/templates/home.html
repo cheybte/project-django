@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Accueil - INPC</title>
+{% endblock %}
+
+{% block content %}
+<style>
+    .nav-tabs {
+        background-color: #004080;
+        border-radius: 5px;
+        padding: 10px;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-tabs a:hover {
+        background-color: #0056b3;
+        border-radius: 5px;
+    }
+
+    .tab-content {
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+    }
+
+    .header-container {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .header-container h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+
+    .header-container p {
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .footer {
+        margin-top: 40px;
+        padding: 20px;
+        text-align: center;
+        background-color: #f4f4f4;
+        border-top: 1px solid #ddd;
+    }
+</style>
+
+<!-- Navigation Tabs -->
+<div class="nav-tabs">
+    <a href="#structures" onclick="showTab('structures')">Structures Administratives</a>
+    <a href="#produits" onclick="showTab('produits')">Produits</a>
+    <a href="#panier" onclick="showTab('panier')">Panier de Produits</a>
+    <a href="#vente" onclick="showTab('vente')">Points de Vente</a>
+    <a href="{% url 'calculate-inpc' %}">Indice de Prix (INPC)</a>
+</div>
+
+<div class="container mt-5">
+    <div class="header-container">
+        <h1>Bienvenue sur l'application INPC</h1>
+        <p>Calculez facilement les indices des prix à la consommation.</p>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Structures Administratives -->
+        <div id="structures" class="tab-pane">
+            <h3>Structures Administratives</h3>
+            <p>Gérer les Wilayas, Moughataas et Communes utilisées dans l'analyse des indices des prix.</p>
+            <ul>
+                <li><a href="{% url 'wilaya-list' %}">Voir les Wilayas</a></li>
+                <li><a href="{% url 'moughataa-list' %}">Voir les Moughataas</a></li>
+                <li><a href="{% url 'commune-list' %}">Voir les Communes</a></li>
+            </ul>
+        </div>
+
+        <!-- Produits -->
+        <div id="produits" class="tab-pane" style="display: none;">
+            <h3>Produits</h3>
+            <p>Gérer les produits pour lesquels nous calculons les indices des prix.</p>
+            <ul>
+                <li><a href="{% url 'product-list' %}">Voir les Produits</a></li>
+                <li><a href="{% url 'producttype-list' %}">Voir les Types de Produits</a></li>
+            </ul>
+        </div>
+
+        <!-- Panier de Produits -->
+        <div id="panier" class="tab-pane" style="display: none;">
+            <h3>Panier de Produits</h3>
+            <p>Gérer les paniers de produits pour suivre les variations des prix.</p>
+            <ul>
+                <li><a href="{% url 'cart-list' %}">Voir les Paniers de Produits</a></li>
+                <li><a href="{% url 'cartproduct-list' %}">Voir les Produits par Panier</a></li>
+            </ul>
+        </div>
+
+        <!-- Points de Vente -->
+        <div id="vente" class="tab-pane" style="display: none;">
+            <h3>Points de Vente</h3>
+            <p>Gérer les lieux où les produits sont vendus avec leurs prix et périodes.</p>
+            <ul>
+                <li><a href="{% url 'pointofsale-list' %}">Voir les Points de Vente</a></li>
+                <li><a href="{% url 'productprice-list' %}">Voir les Prix des Produits</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <h4>Objectif du site</h4>
+        <p>
+            Cette application a pour objectif de faciliter le suivi des variations des prix et le calcul de l'Indice National des Prix à la Consommation (INPC). Elle permet de gérer les données administratives, les produits, les paniers et les points de vente de manière centralisée et efficace.
+        </p>
+    </div>
+</div>
+
+<script>
+    function showTab(tabId) {
+        // Cacher toutes les sections
+        const tabs = document.querySelectorAll('.tab-pane');
+        tabs.forEach(tab => tab.style.display = 'none');
+
+        // Afficher la section sélectionnée
+        const activeTab = document.getElementById(tabId);
+        if (activeTab) {
+            activeTab.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

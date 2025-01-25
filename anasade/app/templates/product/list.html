@@ -1,19 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des Produits</title>
-</head>
-<body>
-    <h1>Liste des Produits</h1>
-    <a href="{% url 'product-create' %}">Créer un nouveau Produit</a>
-    <ul>
-        {% for product in products %}
-            <li>
-                {{ product.name }} ({{ product.code }}) - {{ product.unit_measure }}
-                <a href="{% url 'product-update' product.id %}">Modifier</a> |
-                <a href="{% url 'product-delete' product.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Liste des Produits</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Liste des Produits</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{% url 'product-create' %}" class="btn btn-primary">Créer un nouveau Produit</a>
+        <a href="{% url 'product-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Unité de Mesure</th>
+                <th>Description</th> <!-- Nouvelle colonne ajoutée -->
+                <th>Type de Produit</th> <!-- Nouvelle colonne ajoutée -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.code }}</td>
+                <td>{{ product.unit_measure }}</td>
+                <td>{{ product.description }}</td> <!-- Affiche la description -->
+                <td>{{ product.product_type }}</td> <!-- Affiche le type de produit -->
+                <td>
+                    <a href="{% url 'product-update' product.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'product-delete' product.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Aucun produit trouvé.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

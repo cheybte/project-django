@@ -1,15 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier un Cart</title>
-</head>
-<body>
-    <h1>Modifier un Cart</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Mettre à jour</button>
-    </form>
-    <a href="{% url 'cart-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Modifier un Cart{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h4">Modifier un Cart</h1>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+                <div class="mb-3">
+                    {{ form.as_p }}  <!-- Afficher le formulaire -->
+                </div>
+                <button type="submit" class="btn btn-success">Mettre à jour</button>
+                <a href="{% url 'cart-list' %}" class="btn btn-secondary">Retour à la liste</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

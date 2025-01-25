@@ -1,15 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier une Moughataa</title>
-</head>
-<body>
-    <h1>Modifier une Moughataa</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Mettre à jour</button>
-    </form>
-    <a href="{% url 'moughataa-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Modifier une Moughataa{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Modifier une Moughataa</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+                <div class="mb-3">
+                    {{ form.as_p }}  <!-- Afficher le formulaire -->
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Mettre à jour</button>
+                    <a href="{% url 'moughataa-list' %}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

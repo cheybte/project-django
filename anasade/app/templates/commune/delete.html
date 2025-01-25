@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Supprimer une Commune</title>
-</head>
-<body>
-    <h1>Êtes-vous sûr de vouloir supprimer cette Commune ?</h1>
-    <p>Code : {{ object.code }}</p>
-    <p>Nom : {{ object.name }}</p>
-    <p>Moughataa : {{ object.moughataa.label }}</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Supprimer</button>
-    </form>
-    <a href="{% url 'commune-list' %}">Annuler</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Supprimer une Commune{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h2>Supprimer une Commune</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Code :</strong> {{ object.code }}</p>
+            <p><strong>Nom :</strong> {{ object.name }}</p>
+            <p><strong>Moughataa :</strong> {{ object.moughataa.label }}</p>
+            <p class="text-danger">Êtes-vous sûr de vouloir supprimer cette Commune ? Cette action est irréversible.</p>
+            <form method="post">
+                {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <a href="{% url 'commune-list' %}" class="btn btn-secondary">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

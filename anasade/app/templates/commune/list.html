@@ -1,19 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des Communes</title>
-</head>
-<body>
-    <h1>Liste des Communes</h1>
-    <a href="{% url 'commune-create' %}">Créer une nouvelle Commune</a>
-    <ul>
-        {% for commune in communes %}
-            <li>
-                {{ commune.name }} ({{ commune.code }}) - Moughataa : {{ commune.moughataa.label }}
-                <a href="{% url 'commune-update' commune.id %}">Modifier</a> |
-                <a href="{% url 'commune-delete' commune.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Liste des Communes{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des Communes</h1>
+        <div>
+            <a href="{% url 'commune-create' %}" class="btn btn-primary me-2">Créer une nouvelle Commune</a>
+            <a href="{% url 'commune-export' %}" class="btn btn-success">Exporter en Excel</a>
+            <a href="{% url 'commune-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Moughataa</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commune in communes %}
+                <tr>
+                    <td>{{ commune.name }}</td>
+                    <td>{{ commune.code }}</td>
+                    <td>{{ commune.moughataa.label }}</td>
+                    <td>
+                        <a href="{% url 'commune-update' commune.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'commune-delete' commune.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

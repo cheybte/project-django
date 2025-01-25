@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier une Wilaya</title>
-</head>
-<body>
-    <h1>Modifier une Wilaya</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Mettre à jour</button>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Modifier une Wilaya{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <h1 class="mb-4">Modifier une Wilaya</h1>
+    <form method="post" class="border p-4 shadow-sm bg-light rounded">
+        {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+        {{ form.as_p }}  <!-- Afficher le formulaire -->
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        <a href="{% url 'wilaya-list' %}" class="btn btn-secondary">Retour à la liste</a>
     </form>
-    <a href="{% url 'wilaya-list' %}">Retour à la liste</a>
-</body>
-</html>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

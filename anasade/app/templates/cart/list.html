@@ -1,19 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des Carts</title>
-</head>
-<body>
-    <h1>Liste des Carts</h1>
-    <a href="{% url 'cart-create' %}">Créer un nouveau Cart</a>
-    <ul>
-        {% for cart in carts %}
-            <li>
-                {{ cart.name }} ({{ cart.code }})
-                <a href="{% url 'cart-update' cart.id %}">Modifier</a> |
-                <a href="{% url 'cart-delete' cart.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Liste des Carts{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des Carts</h1>
+        <div>
+            <a href="{% url 'cart-create' %}" class="btn btn-primary me-2">Créer un nouveau Cart</a>
+            <a href="{% url 'cart-export' %}" class="btn btn-success">Exporter en Excel</a>
+            <a href="{% url 'cart-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Code</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart in carts %}
+                <tr>
+                    <td>{{ cart.code }}</td>
+                    <td>{{ cart.name }}</td>
+                    <td>{{ cart.description }}</td>
+                    <td>
+                        <a href="{% url 'cart-update' cart.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'cart-delete' cart.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

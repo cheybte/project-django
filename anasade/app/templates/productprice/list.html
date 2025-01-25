@@ -1,19 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des prix des produits</title>
-</head>
-<body>
-    <h1>Liste des prix des produits</h1>
-    <a href="{% url 'productprice-create' %}">Ajouter un prix</a>
-    <ul>
-        {% for price in product_prices %}
-            <li>
-                Produit : {{ price.product.name }} - Prix : {{ price.value }}
-                <a href="{% url 'productprice-update' price.id %}">Modifier</a> |
-                <a href="{% url 'productprice-delete' price.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Liste des Prix des Produits</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Liste des Prix des Produits</h1>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'productprice-create' %}" class="btn btn-primary">Ajouter un prix</a>
+        <a href="{% url 'productprice-import' %}" class="btn btn-secondary mx-2">Importer un fichier Excel</a>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Produit</th>
+                <th>Point de vente</th>
+                <th>Prix</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for price in product_prices %}
+                <tr>
+                    <td>{{ price.product.name }}</td>
+                    <td>{{ price.point_of_sale.type }}</td>
+                    <td>{{ price.value }}</td>
+                    <td>{{ price.date_from }}</td>
+                    <td>{{ price.date_to }}</td>
+                    <td>
+                        <a href="{% url 'productprice-update' price.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'productprice-delete' price.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Aucun prix trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

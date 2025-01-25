@@ -1,15 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Créer une Wilaya</title>
-</head>
-<body>
-    <h1>Créer une nouvelle Wilaya</h1>
-    <form method="post">
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Créer une Wilaya</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Créer une nouvelle Wilaya</h1>
+    <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Créer</button>
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Créer</button>
+        <a href="{% url 'wilaya-list' %}" class="btn btn-secondary">Retour à la liste</a>
     </form>
-    <a href="{% url 'wilaya-list' %}">Retour à la liste</a>
-</body>
-</html>
+</div>
+{% endblock %}

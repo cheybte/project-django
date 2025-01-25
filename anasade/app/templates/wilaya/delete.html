@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Supprimer une Wilaya</title>
-</head>
-<body>
-    <h1>Êtes-vous sûr de vouloir supprimer cette Wilaya ?</h1>
-    <p>Code : {{ object.code }}</p>
-    <p>Nom : {{ object.name }}</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Supprimer</button>
-    </form>
-    <a href="{% url 'wilaya-list' %}">Annuler</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
 
+{% block title %}Supprimer une Wilaya{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <h1 class="text-danger mb-4">Êtes-vous sûr de vouloir supprimer cette Wilaya ?</h1>
+    <div class="mb-3">
+        <p><strong>Code :</strong> {{ object.code }}</p>
+        <p><strong>Nom :</strong> {{ object.name }}</p>
+    </div>
+    <form method="post" class="d-inline">
+        {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+    <a href="{% url 'wilaya-list' %}" class="btn btn-secondary">Annuler</a>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

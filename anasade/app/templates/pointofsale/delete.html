@@ -1,16 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Supprimer un Point de Vente</title>
-</head>
-<body>
-    <h1>Êtes-vous sûr de vouloir supprimer ce Point de Vente ?</h1>
-    <p>Code : {{ object.code }}</p>
-    <p>Type : {{ object.type }}</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Supprimer</button>
-    </form>
-    <a href="{% url 'pointofsale-list' %}">Annuler</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Supprimer un Point de Vente</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="text-center">Supprimer un Point de Vente</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Code :</strong> {{ object.code }}</p>
+                    <p><strong>Type :</strong> {{ object.type }}</p>
+                    <p class="text-danger">Êtes-vous sûr de vouloir supprimer ce point de vente ?</p>
+                    <form method="post" class="d-flex justify-content-between">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <a href="{% url 'pointofsale-list' %}" class="btn btn-secondary">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

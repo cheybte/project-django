@@ -1,15 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Créer un Point de Vente</title>
-</head>
-<body>
-    <h1>Créer un nouveau Point de Vente</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Créer</button>
-    </form>
-    <a href="{% url 'pointofsale-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Créer un Point de Vente{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="mb-4 text-center">Créer un nouveau Point de Vente</h1>
+            <form method="post" class="bg-light p-4 rounded shadow">
+                {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+                {{ form.as_p }}  <!-- Afficher le formulaire -->
+                <div class="d-flex justify-content-between mt-3">
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                    <a href="{% url 'pointofsale-list' %}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

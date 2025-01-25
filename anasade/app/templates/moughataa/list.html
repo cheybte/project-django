@@ -1,19 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des Moughataas</title>
-</head>
-<body>
-    <h1>Liste des Moughataas</h1>
-    <a href="{% url 'moughataa-create' %}">Créer une nouvelle Moughataa</a>
-    <ul>
-        {% for moughataa in moughataas %}
-            <li>
-                {{ moughataa.label }} ({{ moughataa.code }}) - Wilaya : {{ moughataa.wilaya.name }}
-                <a href="{% url 'moughataa-update' moughataa.id %}">Modifier</a> |
-                <a href="{% url 'moughataa-delete' moughataa.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Liste des Moughataas{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des Moughataas</h1>
+        <div>
+            <a href="{% url 'moughataa-export' %}" class="btn btn-success mb-3">Exporter en Excel</a>
+            <a href="{% url 'moughataa-create' %}" class="btn btn-primary me-2">Créer une nouvelle Moughataa</a>
+            <a href="{% url 'moughataa-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Label</th>
+                <th>Code</th>
+                <th>Wilaya</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for moughataa in moughataas %}
+                <tr>
+                    <td>{{ moughataa.label }}</td>
+                    <td>{{ moughataa.code }}</td>
+                    <td>{{ moughataa.wilaya.name }}</td>
+                    <td>
+                        <a href="{% url 'moughataa-update' moughataa.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'moughataa-delete' moughataa.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

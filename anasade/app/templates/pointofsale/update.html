@@ -1,15 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier un Point de Vente</title>
-</head>
-<body>
-    <h1>Modifier un Point de Vente</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Mettre à jour</button>
-    </form>
-    <a href="{% url 'pointofsale-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Modifier un Point de Vente</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center mb-4">Modifier un Point de Vente</h1>
+            <form method="post" class="border p-4 rounded shadow">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </div>
+            </form>
+            <div class="mt-3 text-center">
+                <a href="{% url 'pointofsale-list' %}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

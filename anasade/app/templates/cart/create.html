@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Créer un Cart</title>
-</head>
-<body>
-    <h1>Créer un nouveau Cart</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Créer</button>
-    </form>
-    <a href="{% url 'cart-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Créer un nouveau Cart{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Créer un nouveau Cart</h1>
+    <div class="card shadow p-4">
+        <form method="post">
+            {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+            {{ form.as_p }}  <!-- Afficher le formulaire -->
+            <button type="submit" class="btn btn-primary">Créer</button>
+            <a href="{% url 'cart-list' %}" class="btn btn-secondary">Retour à la liste</a>
+        </form>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

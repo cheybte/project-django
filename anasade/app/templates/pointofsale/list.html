@@ -1,19 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des Points de Vente</title>
-</head>
-<body>
-    <h1>Liste des Points de Vente</h1>
-    <a href="{% url 'pointofsale-create' %}">Créer un nouveau Point de Vente</a>
-    <ul>
-        {% for point in points_of_sale %}
-            <li>
-                {{ point.code }} - {{ point.type }}
-                <a href="{% url 'pointofsale-update' point.id %}">Modifier</a> |
-                <a href="{% url 'pointofsale-delete' point.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Liste des Points de Vente</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Liste des Points de Vente</h1>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'pointofsale-create' %}" class="btn btn-primary">Créer un nouveau Point de Vente</a>
+        <a href="{% url 'pointofsale-import' %}" class="btn btn-secondary mx-2">Importer un fichier Excel</a>
+        <a href="{% url 'pointofsale-export' %}" class="btn btn-success">Exporter en Excel</a>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Commune</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for point in points_of_sale %}
+                <tr>
+                    <td>{{ point.code }}</td>
+                    <td>{{ point.type }}</td>
+                    <td>{{ point.gps_lat }}</td>
+                    <td>{{ point.gps_lon }}</td>
+                    <td>{{ point.commune.name }}</td>
+                    <td>
+                        <a href="{% url 'pointofsale-update' point.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'pointofsale-delete' point.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Aucun point de vente trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -75,16 +75,20 @@ WSGI_APPLICATION = 'anasade.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import os
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_db',
-        'USER': 'django',
-        'PASSWORD': 'django',
-        'HOST': 'db',  # Nom du service défini dans docker-compose.yml
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',  # Assurez-vous que mysqlclient est installé
+        'NAME': os.getenv('DATABASE_NAME', 'inpc_db'),
+        'USER': os.getenv('DATABASE_USER', 'root'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', '00000000'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),
+        'PORT': os.getenv('DATABASE_PORT', '3306'),
     }
 }
+
+
 
 
 # Password validation

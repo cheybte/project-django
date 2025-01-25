@@ -1,15 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Créer un ProductType</title>
-</head>
-<body>
-    <h1>Créer un nouveau ProductType</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Créer</button>
-    </form>
-    <a href="{% url 'producttype-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Créer un ProductType</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="mb-4 text-center">Créer un nouveau ProductType</h1>
+            <form method="post" class="border p-4 rounded shadow-sm bg-light">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                    <a href="{% url 'producttype-list' %}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

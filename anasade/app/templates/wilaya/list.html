@@ -1,19 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des Wilayas</title>
-</head>
-<body>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Liste des Wilayas{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
     <h1>Liste des Wilayas</h1>
-    <a href="{% url 'wilaya-create' %}">Créer une nouvelle Wilaya</a>
-    <ul>
-        {% for wilaya in wilayas %}
-            <li>
-                {{ wilaya.name }} ({{ wilaya.code }})
-                <a href="{% url 'wilaya-update' wilaya.id %}">Modifier</a> |
-                <a href="{% url 'wilaya-delete' wilaya.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+
+    <!-- Boutons d'action -->
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{% url 'wilaya-export' %}" class="btn btn-success mb-3">Exporter en Excel</a>
+        <a href="{% url 'wilaya-create' %}" class="btn btn-primary">Créer une nouvelle Wilaya</a>
+        <a href="{% url 'wilaya-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+    </div>
+
+    <!-- Tableau des wilayas -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Code</th>
+                <th>Nom</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wilaya in wilayas %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ wilaya.code }}</td>
+                <td>{{ wilaya.name }}</td>
+                <td>
+                    <a href="{% url 'wilaya-update' wilaya.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'wilaya-delete' wilaya.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

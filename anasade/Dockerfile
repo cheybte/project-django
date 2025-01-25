@@ -1,27 +1,25 @@
-# Utilisez l'image Python slim comme base
-FROM python:3.12-slim
+# Utiliser une image Python officielle comme base
+FROM python:3.10-slim
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Installer les dépendances système requises
+# Installer les dépendances système nécessaires pour mysqlclient
 RUN apt-get update && apt-get install -y \
     build-essential \
-    libpq-dev \
-    gcc \
+    default-libmysqlclient-dev \
+    pkg-config \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copier le fichier requirements.txt
-COPY requirements.txt /app/
+# Copier les fichiers de l'application
+COPY . /app/
 
 # Installer les dépendances Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copier les fichiers du projet
-COPY . /app/
-
-# Exposer le port 8000 pour le serveur
+# Exposer le port que l'application utilise
 EXPOSE 8000
 
-# Commande par défaut pour exécuter le serveur
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Commande pour exécuter l'application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:23086"]

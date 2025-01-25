@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Supprimer une Moughataa</title>
-</head>
-<body>
-    <h1>Êtes-vous sûr de vouloir supprimer cette Moughataa ?</h1>
-    <p>Code : {{ object.code }}</p>
-    <p>Nom : {{ object.label }}</p>
-    <p>Wilaya : {{ object.wilaya.name }}</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Supprimer</button>
-    </form>
-    <a href="{% url 'moughataa-list' %}">Annuler</a>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Supprimer une Moughataa{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h2>Supprimer une Moughataa</h2>
+        </div>
+        <div class="card-body">
+            <p>Êtes-vous sûr de vouloir supprimer cette Moughataa ?</p>
+            <ul class="list-group mb-3">
+                <li class="list-group-item"><strong>Code :</strong> {{ object.code }}</li>
+                <li class="list-group-item"><strong>Nom :</strong> {{ object.label }}</li>
+                <li class="list-group-item"><strong>Wilaya :</strong> {{ object.wilaya.name }}</li>
+            </ul>
+            <form method="post" class="d-inline-block">
+                {% csrf_token %}  <!-- Token CSRF pour la sécurité -->
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+            <a href="{% url 'moughataa-list' %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

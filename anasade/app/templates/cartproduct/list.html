@@ -1,20 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des CartProducts</title>
-</head>
-<body>
-    <h1>Liste des CartProducts</h1>
-    <a href="{% url 'cartproduct-create' %}">Ajouter un CartProduct</a>
-    <ul>
-        {% for cartproduct in cartproducts %}
-            <li>
-                {{ cartproduct.cart.name }} - {{ cartproduct.product.name }} 
-                ({{ cartproduct.weight }} kg)
-                <a href="{% url 'cartproduct-update' cartproduct.id %}">Modifier</a> |
-                <a href="{% url 'cartproduct-delete' cartproduct.id %}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}  <!-- Étendre la template de base -->
+
+{% block title %}Liste des CartProducts{% endblock %}  <!-- Définir le titre de la page -->
+
+{% block content %}  <!-- Début du bloc de contenu -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des CartProducts</h1>
+        <div>
+            <a href="{% url 'cartproduct-create' %}" class="btn btn-primary">Ajouter un CartProduct</a>
+            <a href="{% url 'cartproduct-export' %}" class="btn btn-success">Exporter en Excel</a>
+            <a href="{% url 'cartproduct-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+        </div>
+        
+        
+    </div>
+
+    <!-- Liste des CartProducts -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Nom du Cart</th>
+                    <th>Nom du Produit</th>
+                    <th>Poids (kg)</th>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cartproduct in cartproducts %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ cartproduct.cart.name }}</td>
+                        <td>{{ cartproduct.product.name }}</td>
+                        <td>{{ cartproduct.weight }}</td>
+                        <td>{{ cartproduct.date_from }}</td>
+                        <td>{{ cartproduct.date_to }}</td>
+                        <td>
+                            <a href="{% url 'cartproduct-update' cartproduct.id %}" class="btn btn-sm btn-warning">Modifier</a>
+                            <a href="{% url 'cartproduct-delete' cartproduct.id %}" class="btn btn-sm btn-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Aucun CartProduct trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}  <!-- Fin du bloc de contenu -->

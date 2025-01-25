@@ -1,15 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier un Produit</title>
-</head>
-<body>
-    <h1>Modifier un Produit</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Mettre à jour</button>
-    </form>
-    <a href="{% url 'product-list' %}">Retour à la liste</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Modifier un Produit</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4 text-center">Modifier un Produit</h1>
+            <form method="post" class="border p-4 shadow rounded">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-flex justify-content-between mt-3">
+                    <button type="submit" class="btn btn-success">Mettre à jour</button>
+                    <a href="{% url 'product-list' %}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
