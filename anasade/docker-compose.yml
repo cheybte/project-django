@@ -15,10 +15,10 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  django_app:
+  django_app_23086:
     build:
       context: .
-    container_name: django_app
+    container_name: django_app_23086
     restart: always
     depends_on:
       - mysql_db_23086
@@ -33,7 +33,7 @@ services:
     volumes:
       - .:/app
     command: >
-      sh -c "
+      sh -c "python manage.py makemigrations &&
         python manage.py migrate &&
         python manage.py runserver 0.0.0.0:23086
       "

@@ -874,6 +874,12 @@ class CartProductDeleteView(DeleteView):
     template_name = 'cartproduct/delete.html'
     success_url = reverse_lazy('cartproduct-list')
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
+
+@login_required
+
 
 
 
