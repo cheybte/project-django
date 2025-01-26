@@ -10,6 +10,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="{% url 'product-create' %}" class="btn btn-primary">Créer un nouveau Produit</a>
         <a href="{% url 'product-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
+        <a href="{% url 'product-export' %}" class="btn btn-success mb-3">Exporter en Excel</a>
     </div>
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -17,8 +18,8 @@
                 <th>Nom</th>
                 <th>Code</th>
                 <th>Unité de Mesure</th>
-                <th>Description</th> <!-- Nouvelle colonne ajoutée -->
-                <th>Type de Produit</th> <!-- Nouvelle colonne ajoutée -->
+                <th>Description</th>
+                <th>Type de Produit</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,8 +29,8 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.code }}</td>
                 <td>{{ product.unit_measure }}</td>
-                <td>{{ product.description }}</td> <!-- Affiche la description -->
-                <td>{{ product.product_type }}</td> <!-- Affiche le type de produit -->
+                <td>{{ product.description }}</td>
+                <td>{{ product.product_type.label }}</td> <!-- Affiche le label du type de produit -->
                 <td>
                     <a href="{% url 'product-update' product.id %}" class="btn btn-warning btn-sm">Modifier</a>
                     <a href="{% url 'product-delete' product.id %}" class="btn btn-danger btn-sm">Supprimer</a>

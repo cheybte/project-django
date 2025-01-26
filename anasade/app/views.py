@@ -423,21 +423,67 @@ def export_wilayas(request):
         fields=['code', 'name']
     )
 
+
+
+from django.http import HttpResponse
+import pandas as pd
+
 def export_moughataas(request):
-    return export_data(
-        request,
-        model=Moughataa,
-        filename='moughataas',
-        fields=['code', 'label', 'wilaya__name']  # wilaya__name pour inclure le nom de la Wilaya associée
-    )
+    # Récupérer les données de Moughataa
+    moughataas = Moughataa.objects.all().values('code', 'label', 'wilaya__name')
+
+    # Convertir les données en DataFrame pandas
+    df = pd.DataFrame(list(moughataas))
+
+    # Renommer les colonnes pour un affichage plus clair
+    df.rename(columns={
+        'code': 'Code',
+        'label': 'Label',
+        'wilaya__name': 'Wilaya'
+    }, inplace=True)
+
+    # Créer une réponse HTTP avec le fichier Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="moughataas.xlsx"'
+
+    # Exporter le DataFrame vers Excel
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Moughataas')
+
+    return response
+
+
+
 
 def export_communes(request):
-    return export_data(
-        request,
-        model=Commune,
-        filename='communes',
-        fields=['code', 'name', 'moughataa__label', 'moughataa__wilaya__name']  # Inclure les relations avec Moughataa et Wilaya
-    )
+    # Récupérer les données de Commune
+    communes = Commune.objects.all().values('code', 'name', 'moughataa__label', 'moughataa__wilaya__name')
+
+    # Convertir les données en DataFrame pandas
+    df = pd.DataFrame(list(communes))
+
+    # Renommer les colonnes pour un affichage plus clair
+    df.rename(columns={
+        'code': 'Code',
+        'name': 'Name',
+        'moughataa__label': 'Moughataa',
+        'moughataa__wilaya__name': 'Wilaya'
+    }, inplace=True)
+
+    # Créer une réponse HTTP avec le fichier Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="communes.xlsx"'
+
+    # Exporter le DataFrame vers Excel
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Communes')
+
+    return response
+
+
+
+
+
 
 def export_carts(request):
     return export_data(
@@ -446,40 +492,130 @@ def export_carts(request):
         filename='carts',
         fields=['code', 'name', 'description']  # Colonnes à inclure dans l'export
     )
-    
+
+
+
+from django.http import HttpResponse
+import pandas as pd
+
 def export_cartproducts(request):
-    return export_data(
-        request,
-        model=CartProduct,
-        filename='cartproducts',
-        fields=['cart__name', 'product__name', 'weight', 'date_from', 'date_to']
-    )
+    # Récupérer les données de CartProduct
+    cartproducts = CartProduct.objects.all().values('cart__name', 'product__name', 'weight', 'date_from', 'date_to')
+
+    # Convertir les données en DataFrame pandas
+    df = pd.DataFrame(list(cartproducts))
+
+    # Renommer les colonnes pour un affichage plus clair
+    df.rename(columns={
+        'cart__name': 'Cart Name',
+        'product__name': 'Product Name',
+        'weight': 'Weight',
+        'date_from': 'Date From',
+        'date_to': 'Date To'
+    }, inplace=True)
+
+    # Créer une réponse HTTP avec le fichier Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="cartproducts.xlsx"'
+
+    # Exporter le DataFrame vers Excel
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='CartProducts')
+
+    return response
+
+
+
+
+from django.http import HttpResponse
+import pandas as pd
 
 def export_products(request):
-    return export_data(
-        request,
-        model=Product,
-        filename='products',
-        fields=['code', 'name', 'description', 'unit_measure', 'product_type__label']
-    )
+    # Récupérer les données de Product
+    products = Product.objects.all().values('code', 'name', 'description', 'unit_measure', 'product_type__label')
+
+    # Convertir les données en DataFrame pandas
+    df = pd.DataFrame(list(products))
+
+    # Renommer les colonnes pour un affichage plus clair
+    df.rename(columns={
+        'code': 'Code',
+        'name': 'Name',
+        'description': 'Description',
+        'unit_measure': 'Unit Measure',
+        'product_type__label': 'Product Type'
+    }, inplace=True)
+
+    # Créer une réponse HTTP avec le fichier Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="products.xlsx"'
+
+    # Exporter le DataFrame vers Excel
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Products')
+
+    return response
+
+
+
+
+from django.http import HttpResponse
+import pandas as pd
 
 def export_pointofsales(request):
-    return export_data(
-        request,
-        model=PointOfSale,
-        filename='points_of_sale',
-        fields=['code', 'type', 'gps_lat', 'gps_lon', 'commune__name']
-    )
+    # Récupérer les données de PointOfSale
+    pointofsales = PointOfSale.objects.all().values('code', 'type', 'gps_lat', 'gps_lon', 'commune__name')
 
+    # Convertir les données en DataFrame pandas
+    df = pd.DataFrame(list(pointofsales))
+
+    # Renommer les colonnes pour un affichage plus clair
+    df.rename(columns={
+        'code': 'Code',
+        'type': 'Type',
+        'gps_lat': 'GPS Latitude',
+        'gps_lon': 'GPS Longitude',
+        'commune__name': 'Commune'
+    }, inplace=True)
+
+    # Créer une réponse HTTP avec le fichier Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="points_of_sale.xlsx"'
+
+    # Exporter le DataFrame vers Excel
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='PointsOfSale')
+
+    return response
+
+    
 
 
 def export_productprices(request):
-    return export_data(
-        request,
-        model=ProductPrice,
-        filename='product_prices',
-        fields=['value', 'date_from', 'date_to', 'product__name', 'point_of_sale__code']
-    )
+    # Récupérer les données de ProductPrice
+    productprices = ProductPrice.objects.all().values('value', 'date_from', 'date_to', 'product__name', 'point_of_sale__code')
+
+    # Convertir les données en DataFrame pandas
+    df = pd.DataFrame(list(productprices))
+
+    # Renommer les colonnes pour un affichage plus clair
+    df.rename(columns={
+        'value': 'Value',
+        'date_from': 'Date From',
+        'date_to': 'Date To',
+        'product__name': 'Product Name',
+        'point_of_sale__code': 'Point of Sale Code'
+    }, inplace=True)
+
+    # Créer une réponse HTTP avec le fichier Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="product_prices.xlsx"'
+
+    # Exporter le DataFrame vers Excel
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='ProductPrices')
+
+    return response
 
 
 
