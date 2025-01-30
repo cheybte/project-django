@@ -10,8 +10,11 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="{% url 'product-create' %}" class="btn btn-primary">Créer un nouveau Produit</a>
         <a href="{% url 'product-import' %}" class="btn btn-secondary">Importer un fichier Excel</a>
-        <a href="{% url 'product-export' %}" class="btn btn-success mb-3">Exporter en Excel</a>
+        <a href="{% url 'product-export' %}" class="btn btn-success">Exporter en Excel</a>
+        <a href="{% url 'product-filter' %}" class="btn btn-info">Filtrer les Produits</a> <!-- Lien vers la page de filtrage -->
     </div>
+
+    <!-- Tableau des produits -->
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
             <tr>
@@ -30,7 +33,7 @@
                 <td>{{ product.code }}</td>
                 <td>{{ product.unit_measure }}</td>
                 <td>{{ product.description }}</td>
-                <td>{{ product.product_type.label }}</td> <!-- Affiche le label du type de produit -->
+                <td>{{ product.product_type.label }}</td>
                 <td>
                     <a href="{% url 'product-update' product.id %}" class="btn btn-warning btn-sm">Modifier</a>
                     <a href="{% url 'product-delete' product.id %}" class="btn btn-danger btn-sm">Supprimer</a>

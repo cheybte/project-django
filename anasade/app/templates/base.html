@@ -70,3 +70,37 @@
 
   </body>
 </html>
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    /<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('inpcTrendsChart').getContext('2d');
+        const inpcTrendsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                datasets: [
+                    {% for groupe, tendances in inpc_tendances_mensuelles.items %}
+                    {
+                        label: '{{ groupe }}',
+                        data: {{ tendances|safe }},
+                        borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16), // Couleur aléatoire
+                        fill: false,
+                    },
+                    {% endfor %}
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>/ Code JavaScript pour les graphiques
+</script>
+{% endblock %}

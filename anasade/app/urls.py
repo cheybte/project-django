@@ -11,9 +11,8 @@ from .views import (
     import_products, export_products,
     import_pointofsales, export_pointofsales,
     import_productprices, export_productprices,
-    import_producttypes, export_producttypes,
+    import_producttypes, export_producttypes, product_filter,productprice_filter,get_chart_data,get_inpc_chart_data,
     calculer_inpc,
-
     # Vues pour les modèles
     WilayaListView, WilayaCreateView, WilayaUpdateView, WilayaDeleteView,
     MoughataaListView, MoughataaCreateView, MoughataaUpdateView, MoughataaDeleteView,
@@ -32,8 +31,9 @@ from .views import (
 urlpatterns = [
     # Page d'accueil
     path('', home, name='home'),
-    
-    # Wilaya
+    path('inpc-chart-data/', get_inpc_chart_data, name='get_inpc_chart_data'),
+
+    path('get-chart-data/', get_chart_data, name='get_chart_data'),
     path('wilayas/', WilayaListView.as_view(), name='wilaya-list'),
     path('wilayas/create/', WilayaCreateView.as_view(), name='wilaya-create'),
     path('wilayas/<int:pk>/update/', WilayaUpdateView.as_view(), name='wilaya-update'),
@@ -72,7 +72,7 @@ urlpatterns = [
     path('products/<int:pk>/delete/', ProductDeleteView.as_view(), name='product-delete'),
     path('products/import/', import_products, name='product-import'),
     path('products/export/', export_products, name='product-export'),
-
+    path('products/filter/', product_filter, name='product-filter'),
     # PointOfSale
     path('pointsofsale/', PointOfSaleListView.as_view(), name='pointofsale-list'),
     path('pointsofsale/create/', PointOfSaleCreateView.as_view(), name='pointofsale-create'),
@@ -104,11 +104,12 @@ urlpatterns = [
     path('productprices/<int:pk>/delete/', ProductPriceDeleteView.as_view(), name='productprice-delete'),
     path('productprices/import/', import_productprices, name='productprice-import'),
     path('productprices/export/', export_productprices, name='productprice-export'),
-
+    path('productprices/filter/', productprice_filter, name='productprice-filter'),
     # INPC
     path('inpc/', calculer_inpc, name='calculate-inpc'),
     
     path('login/', LoginView.as_view(template_name='login.html'), name='login'),  # Page de connexion
     path('logout/', LogoutView.as_view(), name='logout'),
+    
 
 ]

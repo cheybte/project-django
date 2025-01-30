@@ -647,7 +647,6 @@ from datetime import datetime
 from app.models import ProductType, Product, ProductPrice, CartProduct
 
 from calendar import month_name
-
 def calculer_inpc(request):
     """
     Calcule l'Indice National des Prix à la Consommation (INPC)
@@ -673,6 +672,7 @@ def calculer_inpc(request):
     # Dictionnaires pour stocker les résultats
     inpc_par_groupe = []
     inpc_global = {}
+    inpc_tendances_mensuelles = {}  # Pour stocker les tendances mensuelles par groupe
 
     # Calculer l'INPC pour chaque type de produit
     for type_produit in types_produits:
@@ -684,6 +684,9 @@ def calculer_inpc(request):
         prix_total_courant = 0
         poids_total = 0
         produits_calcules = 0
+
+        # Liste pour stocker les tendances mensuelles
+        tendances_mensuelles = []
 
         for produit in produits:
             # Récupérer les prix pour l'année de base
@@ -703,8 +706,8 @@ def calculer_inpc(request):
             # Récupérer le poids du produit dans les paniers
             cart_products = CartProduct.objects.filter(
                 product=produit,
-                date_from__year__lte=annee_courante,  # Correction ici
-                date_to__year__gte=annee_courante     # Correction ici
+                date_from__year__lte=annee_courante,
+                date_to__year__gte=annee_courante
             )
 
             # Vérifier que tous les éléments nécessaires sont présents
@@ -730,6 +733,45 @@ def calculer_inpc(request):
                 'Produits Calculés': produits_calcules
             })
 
+        # Calculer les tendances mensuelles pour ce groupe
+        tendances_mensuelles = []
+        for mois in range(1, 13):
+            prix_total_base_mois = 0
+            prix_total_courant_mois = 0
+            poids_total_mois = 0
+
+            for produit in produits:
+                prix_base_mois = ProductPrice.objects.filter(
+                    product=produit,
+                    date_from__year=ANNEE_BASE,
+                    date_from__month=mois
+                ).order_by('-date_from').first()
+
+                prix_courant_mois = ProductPrice.objects.filter(
+                    product=produit,
+                    date_from__year=annee_courante,
+                    date_from__month=mois
+                ).order_by('-date_from').first()
+
+                cart_products_mois = CartProduct.objects.filter(
+                    product=produit,
+                    date_from__year__lte=annee_courante,
+                    date_to__year__gte=annee_courante
+                )
+
+                if prix_base_mois and prix_courant_mois and cart_products_mois.exists():
+                    poids_moyen_mois = cart_products_mois.aggregate(Avg('weight'))['weight__avg'] or 0
+
+                    if poids_moyen_mois > 0:
+                        prix_total_base_mois += prix_base_mois.value * poids_moyen_mois
+                        prix_total_courant_mois += prix_courant_mois.value * poids_moyen_mois
+                        poids_total_mois += poids_moyen_mois
+
+            inpc_groupe_mois = (prix_total_courant_mois / prix_total_base_mois * 100) if prix_total_base_mois > 0 else 0
+            tendances_mensuelles.append(inpc_groupe_mois)
+
+        inpc_tendances_mensuelles[type_produit.label] = tendances_mensuelles
+
     # Calculer l'INPC global
     inpc_total = sum(groupe['INPC'] for groupe in inpc_par_groupe) / len(inpc_par_groupe) if inpc_par_groupe else 0
     inpc_global[(annee_courante, mois_courant)] = inpc_total
@@ -745,8 +787,10 @@ def calculer_inpc(request):
         'mois_courant': mois_courant,
         'annees_disponibles': annees_disponibles,
         'inpc_par_groupe': inpc_par_groupe,
-        'inpc_global': inpc_global
+        'inpc_global': inpc_global,
+        'inpc_tendances_mensuelles': inpc_tendances_mensuelles  # Données pour le graphique
     }
+    
 
     return render(request, 'inpc.html', context)
 
@@ -761,6 +805,188 @@ def calculer_inpc(request):
 
 
 
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Product
+
+def product_filter(request):
+    # Récupérer les paramètres de filtrage depuis l'URL
+    name = request.GET.get('name', '')
+    code = request.GET.get('code', '')
+    product_type = request.GET.get('product_type', '')
+
+    # Filtrer les produits en fonction des paramètres
+    products = Product.objects.all()
+
+    if name:
+        products = products.filter(name__icontains=name)
+    if code:
+        products = products.filter(code__icontains=code)
+    if product_type:
+        products = products.filter(product_type__label__icontains=product_type)
+
+    # Passer les produits filtrés au template
+    context = {
+        'products': products,
+    }
+    return render(request, 'product/filter.html', context)
+
+
+
+from django.shortcuts import render
+from django.db.models import Q
+from .models import ProductPrice
+
+def productprice_filter(request):
+    # Récupérer les paramètres de filtrage depuis l'URL
+    product = request.GET.get('product', '')
+    point_of_sale = request.GET.get('point_of_sale', '')
+    value = request.GET.get('value', '')
+
+    # Filtrer les prix des produits en fonction des paramètres
+    productprices = ProductPrice.objects.all()
+
+    if product:
+        productprices = productprices.filter(product__name__icontains=product)
+    if point_of_sale:
+        productprices = productprices.filter(point_of_sale__name__icontains=point_of_sale)
+    if value:
+        productprices = productprices.filter(value=value)
+
+    # Passer les prix des produits filtrés au template
+    context = {
+        'productprices': productprices,
+    }
+    return render(request, 'productprice/filter.html', context)
+
+
+
+
+
+
+from django.http import JsonResponse
+from django.db.models import Avg, Count
+from .models import Product, ProductPrice, ProductType
+import numpy as np
+import random
+
+def get_chart_data(request):
+    # 📌 Récupération des prix moyens par mois depuis la base de données
+    price_data = ProductPrice.objects.values('date_from').annotate(avg_price=Avg('value')).order_by('date_from')
+
+    # 📌 Transformation des données pour le Line Chart
+    dates = [str(entry['date_from']) for entry in price_data]  # Conversion des dates en chaînes
+    avg_prices = [entry['avg_price'] for entry in price_data]
+
+    line_chart_data = {
+        'labels': dates,
+        'datasets': [{
+            'label': 'Prix Moyen',
+            'data': avg_prices,
+            'borderColor': 'rgba(75, 192, 192, 1)',
+            'fill': False,
+            'tension': 0.4  # Rend la courbe plus fluide
+        }]
+    }
+
+    # 📌 Récupération de la répartition des produits par type (Pie Chart)
+    product_types = ProductType.objects.annotate(product_count=Count('products'))
+    pie_chart_data = {
+        'labels': [pt.label for pt in product_types],
+        'datasets': [{
+            'data': [pt.product_count for pt in product_types],
+            'backgroundColor': ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+        }]
+    }
+
+    # 📌 Récupération des prix moyens par type de produit (Bar Chart)
+    avg_prices_by_type = ProductPrice.objects.values('product__product_type__label').annotate(avg_price=Avg('value'))
+    bar_chart_data = {
+        'labels': [entry['product__product_type__label'] for entry in avg_prices_by_type],
+        'datasets': [{
+            'label': 'Prix Moyen',
+            'data': [entry['avg_price'] for entry in avg_prices_by_type],
+            'backgroundColor': 'rgba(153, 102, 255, 0.6)',
+        }]
+    }
+
+    # 📌 Génération d'une courbe fluide basée sur les données réelles (modèle sinusoïdal)
+    if len(avg_prices) > 0:
+        x_values = np.linspace(0, len(avg_prices) - 1, len(avg_prices))
+        y_values = [price + random.uniform(-5, 5) for price in avg_prices]  # Ajout d'une variation aléatoire
+
+        sinusoidal_chart_data = {
+            'labels': dates,
+            'datasets': [{
+                'label': 'Évolution Continue de l\'INPC',
+                'data': y_values,
+                'borderColor': 'rgba(255, 99, 132, 1)',
+                'fill': False,
+                'tension': 0.4  # Rend la courbe plus lisse
+            }]
+        }
+    else:
+        sinusoidal_chart_data = {
+            'labels': [],
+            'datasets': []
+        }
+
+    # 📌 Retourner les données JSON pour être utilisées par Chart.js
+    return JsonResponse({
+        'line_chart_data': line_chart_data,
+        'pie_chart_data': pie_chart_data,
+        'bar_chart_data': bar_chart_data,
+        'sinusoidal_chart_data': sinusoidal_chart_data,
+    })
+
+
+
+
+
+
+import numpy as np
+import json
+from scipy.interpolate import make_interp_spline
+from django.http import JsonResponse
+from django.db.models import Avg
+from .models import ProductPrice
+
+def get_inpc_chart_data(request):
+    # Récupérer les prix quotidiens et calculer l'INPC
+    prices = (
+        ProductPrice.objects
+        .values('date_from')
+        .annotate(avg_price=Avg('value'))
+        .order_by('date_from')
+    )
+
+    # Extraire les données
+    dates = [str(p['date_from']) for p in prices]
+    inpc_values = [p['avg_price'] for p in prices]
+
+    # Interpolation pour lisser les données (éviter les graphes en "marches")
+    if len(inpc_values) > 3:  # S'assurer qu'il y a assez de points pour interpoler
+        x = np.arange(len(inpc_values))
+        x_smooth = np.linspace(x.min(), x.max(), 300)  # 300 points pour une courbe lisse
+        spline = make_interp_spline(x, inpc_values, k=3)  # Interpolation spline cubique
+        inpc_smooth = spline(x_smooth)
+    else:
+        x_smooth, inpc_smooth = x, inpc_values  # Pas d'interpolation si trop peu de points
+
+    # Préparer les données pour Chart.js
+    chart_data = {
+        'labels': dates,
+        'datasets': [{
+            'label': "Évolution INPC Continue",
+            'data': inpc_smooth.tolist(),
+            'borderColor': 'rgba(255, 99, 132, 1)',
+            'fill': False,
+            'tension': 0.4  # Rend la courbe lisse
+        }]
+    }
+
+    return JsonResponse(chart_data)
+
 
 
 
@@ -773,6 +999,7 @@ def calculer_inpc(request):
 # --- VUES POUR WILAYA ---
 class WilayaCreateView(CreateView):
     model = Wilaya
+    # Wilaya
     fields = ['code', 'name']
     template_name = 'wilaya/create.html'
     success_url = reverse_lazy('wilaya-list')

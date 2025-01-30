@@ -1,73 +1,64 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Accueil - INPC</title>
+    <title>Accueil - INPC</title>
 {% endblock %}
 
 {% block content %}
 <style>
-    .nav-tabs {
+    .accordion-header {
+        cursor: pointer;
         background-color: #004080;
-        border-radius: 5px;
-        padding: 10px;
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 20px;
-    }
-
-    .nav-tabs a {
         color: white;
-        text-decoration: none;
-        font-weight: bold;
-        padding: 10px 20px;
-        transition: background-color 0.3s ease;
-    }
-
-    .nav-tabs a:hover {
-        background-color: #0056b3;
+        padding: 10px 15px;
         border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.2em;
+        font-weight: bold;
     }
 
-    .tab-content {
-        margin-top: 20px;
-        background-color: #f9f9f9;
+    .accordion-header:hover {
+        background-color: #0056b3;
+    }
+
+    .accordion-content {
+        display: none;
+        padding: 10px 15px;
         border: 1px solid #ddd;
         border-radius: 5px;
-        padding: 20px;
+        background-color: #f9f9f9;
+        margin-top: 5px;
     }
 
-    .header-container {
-        text-align: center;
-        margin-bottom: 30px;
+    .accordion-content ul {
+        list-style-type: none;
+        padding-left: 0;
     }
 
-    .header-container h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
+    .accordion-content ul li {
+        padding: 5px 0;
     }
 
-    .header-container p {
-        font-size: 1.2em;
-        color: #555;
+    .accordion-content ul li a {
+        text-decoration: none;
+        color: #004080;
+        font-weight: bold;
     }
 
-    .footer {
-        margin-top: 40px;
-        padding: 20px;
-        text-align: center;
-        background-color: #f4f4f4;
-        border-top: 1px solid #ddd;
+    .accordion-content ul li a:hover {
+        text-decoration: underline;
+    }
+
+    .triangle {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate {
+        transform: rotate(90deg);
     }
 </style>
-
-<!-- Navigation Tabs -->
-<div class="nav-tabs">
-    <a href="#structures" onclick="showTab('structures')">Structures Administratives</a>
-    <a href="#produits" onclick="showTab('produits')">Produits</a>
-    <a href="#panier" onclick="showTab('panier')">Panier de Produits</a>
-    <a href="#vente" onclick="showTab('vente')">Points de Vente</a>
-    <a href="{% url 'calculate-inpc' %}">Indice de Prix (INPC)</a>
-</div>
 
 <div class="container mt-5">
     <div class="header-container">
@@ -75,70 +66,183 @@
         <p>Calculez facilement les indices des prix à la consommation.</p>
     </div>
 
-    <!-- Tab Content -->
-    <div class="tab-content">
-        <!-- Structures Administratives -->
-        <div id="structures" class="tab-pane">
-            <h3>Structures Administratives</h3>
-            <p>Gérer les Wilayas, Moughataas et Communes utilisées dans l'analyse des indices des prix.</p>
-            <ul>
-                <li><a href="{% url 'wilaya-list' %}">Voir les Wilayas</a></li>
-                <li><a href="{% url 'moughataa-list' %}">Voir les Moughataas</a></li>
-                <li><a href="{% url 'commune-list' %}">Voir les Communes</a></li>
-            </ul>
+    <!-- Accordéon -->
+    <div class="accordion">
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion('structures')">
+                Structures Administratives
+                <span class="triangle">&#9654;</span>
+            </div>
+            <div id="structures" class="accordion-content">
+                <ul>
+                    <li><a href="{% url 'wilaya-list' %}">Voir les Wilayas</a></li>
+                    <li><a href="{% url 'moughataa-list' %}">Voir les Moughataas</a></li>
+                    <li><a href="{% url 'commune-list' %}">Voir les Communes</a></li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Produits -->
-        <div id="produits" class="tab-pane" style="display: none;">
-            <h3>Produits</h3>
-            <p>Gérer les produits pour lesquels nous calculons les indices des prix.</p>
-            <ul>
-                <li><a href="{% url 'product-list' %}">Voir les Produits</a></li>
-                <li><a href="{% url 'producttype-list' %}">Voir les Types de Produits</a></li>
-            </ul>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion('produits')">
+                Produits
+                <span class="triangle">&#9654;</span>
+            </div>
+            <div id="produits" class="accordion-content">
+                <ul>
+                    <li><a href="{% url 'product-list' %}">Voir les Produits</a></li>
+                    <li><a href="{% url 'producttype-list' %}">Voir les Types de Produits</a></li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Panier de Produits -->
-        <div id="panier" class="tab-pane" style="display: none;">
-            <h3>Panier de Produits</h3>
-            <p>Gérer les paniers de produits pour suivre les variations des prix.</p>
-            <ul>
-                <li><a href="{% url 'cart-list' %}">Voir les Paniers de Produits</a></li>
-                <li><a href="{% url 'cartproduct-list' %}">Voir les Produits par Panier</a></li>
-            </ul>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion('panier')">
+                Panier de Produits
+                <span class="triangle">&#9654;</span>
+            </div>
+            <div id="panier" class="accordion-content">
+                <ul>
+                    <li><a href="{% url 'cart-list' %}">Voir les Paniers de Produits</a></li>
+                    <li><a href="{% url 'cartproduct-list' %}">Voir les Produits par Panier</a></li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Points de Vente -->
-        <div id="vente" class="tab-pane" style="display: none;">
-            <h3>Points de Vente</h3>
-            <p>Gérer les lieux où les produits sont vendus avec leurs prix et périodes.</p>
-            <ul>
-                <li><a href="{% url 'pointofsale-list' %}">Voir les Points de Vente</a></li>
-                <li><a href="{% url 'productprice-list' %}">Voir les Prix des Produits</a></li>
-            </ul>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion('vente')">
+                Points de Vente
+                <span class="triangle">&#9654;</span>
+            </div>
+            <div id="vente" class="accordion-content">
+                <ul>
+                    <li><a href="{% url 'pointofsale-list' %}">Voir les Points de Vente</a></li>
+                    <li><a href="{% url 'productprice-list' %}">Voir les Prix des Produits</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <!-- Footer Section -->
-    <div class="footer">
-        <h4>Objectif du site</h4>
-        <p>
-            Cette application a pour objectif de faciliter le suivi des variations des prix et le calcul de l'Indice National des Prix à la Consommation (INPC). Elle permet de gérer les données administratives, les produits, les paniers et les points de vente de manière centralisée et efficace.
-        </p>
+    <div class="accordion-item">
+        <div class="accordion-header d-flex justify-content-between align-items-center bg-primary text-white p-3 fw-bold"
+             style="cursor: pointer; border-radius: 5px;" onclick="window.location.href='{% url 'calculate-inpc' %}'">
+            Indice National des Prix à la Consommation
+            <span class="triangle">&#9654;</span>
+        </div>
+    </div>
+    
+    <style>
+        .accordion-header {
+            background-color: #004080 !important; /* Même couleur que les autres */
+            color: white;
+            transition: background-color 0.3s ease; /* Effet doux */
+        }
+    
+        .accordion-header:hover {
+            background-color: #004080 !important; /* Pas de changement de couleur */
+        }
+    </style>
+    
+    
+    
+    
+    </div>
+    
+
+    <!-- Graphiques -->
+    <div class="row mt-4">
+        <div class="col-md-6 chart-container">
+            <div class="card">
+                <div class="card-header"><h3>Tendances Mensuelles des Prix</h3></div>
+                <div class="card-body"><canvas id="lineChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="col-md-6 chart-container">
+            <div class="card">
+                <div class="card-header"><h3>Répartition des Types de Produits</h3></div>
+                <div class="card-body"><canvas id="pieChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="col-md-6 chart-container">
+            <div class="card">
+                <div class="card-header"><h3>Prix Moyens par Type de Produit</h3></div>
+                <div class="card-body"><canvas id="barChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="col-md-6 chart-container">
+            <div class="card">
+                <div class="card-header"><h3>Évolution saisonnière des prix</h3></div>
+                <div class="card-body"><canvas id="sinusoidalChart"></canvas></div>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- Scripts -->
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script>
-    function showTab(tabId) {
-        // Cacher toutes les sections
-        const tabs = document.querySelectorAll('.tab-pane');
-        tabs.forEach(tab => tab.style.display = 'none');
+    function toggleAccordion(section) {
+        const content = document.getElementById(section);
+        const icon = content.previousElementSibling.querySelector('.triangle');
 
-        // Afficher la section sélectionnée
-        const activeTab = document.getElementById(tabId);
-        if (activeTab) {
-            activeTab.style.display = 'block';
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            icon.classList.remove("rotate");
+        } else {
+            content.style.display = "block";
+            icon.classList.add("rotate");
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch("{% url 'get_chart_data' %}")
+            .then(response => response.json())
+            .then(data => {
+                new Chart(document.getElementById('lineChart').getContext('2d'), {
+                    type: 'line',
+                    data: data.line_chart_data,
+                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                });
+
+                new Chart(document.getElementById('pieChart').getContext('2d'), {
+                    type: 'pie',
+                    data: data.pie_chart_data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = ((value / sum) * 100).toFixed(1) + "%";
+                                    return percentage;
+                                },
+                                color: '#fff',
+                                font: { weight: 'bold', size: 14 }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+
+                new Chart(document.getElementById('barChart').getContext('2d'), {
+                    type: 'bar',
+                    data: data.bar_chart_data,
+                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                });
+
+                new Chart(document.getElementById('sinusoidalChart').getContext('2d'), {
+                    type: 'line',
+                    data: data.sinusoidal_chart_data,
+                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des données:', error));
+    });
 </script>
+{% endblock %}
 {% endblock %}

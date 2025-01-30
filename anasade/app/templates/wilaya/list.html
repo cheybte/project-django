@@ -1,8 +1,8 @@
-{% extends 'base.html' %}  <!-- Étendre la template de base -->
+{% extends 'base.html' %}
 
-{% block title %}Liste des Wilayas{% endblock %}  <!-- Définir le titre de la page -->
+{% block title %}Liste des Wilayas{% endblock %}
 
-{% block content %}  <!-- Début du bloc de contenu -->
+{% block content %}
 <div class="container mt-5">
     <h1>Liste des Wilayas</h1>
 
@@ -14,8 +14,8 @@
     </div>
 
     <!-- Tableau des wilayas -->
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
             <tr>
                 <th>#</th>
                 <th>Code</th>
@@ -38,4 +38,65 @@
         </tbody>
     </table>
 </div>
-{% endblock %}  <!-- Fin du bloc de contenu -->
+
+<style>
+    /* Styles pour le tableau */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #004080; /* Couleur de fond pour l'en-tête */
+        color: white; /* Couleur du texte de l'en-tête */
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9; /* Couleur de fond pour les lignes impaires */
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #e9e9e9; /* Couleur de fond pour les lignes paires */
+    }
+
+    .table tbody tr:hover {
+        background-color: #d1e7ff; /* Couleur de fond au survol */
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.875em;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: black;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+</style>
+{% endblock %}
