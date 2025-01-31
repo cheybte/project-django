@@ -132,7 +132,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORRIGINS = ['http://138.201.52.29:25086']
+CSRF_TRUSTED_ORRIGINS = ['http://138.201.52.29:25086','http://teaching.sidi.xyz:25086']
 
 LOGIN_URL = 'login'  # URL pour la page de connexion
 LOGIN_REDIRECT_URL = '/'  # Redirige vers Home après connexion
